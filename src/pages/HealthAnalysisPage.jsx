@@ -354,19 +354,24 @@ export default function HealthAnalysisPage() {
           </div>
         </div>
 
-        {/* Quick Symptoms Chips */}
-        <div className="mb-3 flex flex-wrap gap-2 shrink-0 items-center relative z-10">
-          <span className="text-[11px] font-bold text-slate-400 uppercase tracking-wider mr-1">Quick Select:</span>
-          {quickSymptoms.map(s => (
-            <button 
-              key={s} 
-              type="button" 
-              onClick={() => sendMessage(s)} 
-              className="px-3 py-1 rounded-xl border border-slate-200 bg-white text-slate-700 text-[13px] font-semibold hover:bg-teal-600 hover:text-white hover:border-teal-600 transition-all active:scale-95 shadow-2xs card-interactive cursor-pointer"
-            >
-              + {s}
-            </button>
-          ))}
+        {/* Quick Symptoms Chips (Horizontally Scrollable Single Row for Mobile/Tablet Spacing) */}
+        <div className="mb-3.5 flex flex-row gap-2 shrink-0 items-center overflow-x-auto scrollbar-none py-1.5 relative z-10 w-full">
+          <span className="text-[11px] font-bold text-slate-400 uppercase tracking-wider shrink-0 mr-1 flex items-center gap-1">
+            <span className="material-symbols-outlined text-[14px]">touch_app</span>
+            Quick Select:
+          </span>
+          <div className="flex gap-2">
+            {quickSymptoms.map(s => (
+              <button 
+                key={s} 
+                type="button" 
+                onClick={() => sendMessage(s)} 
+                className="px-3.5 py-1.5 rounded-xl border border-slate-200 bg-white text-slate-700 text-[13px] font-bold hover:bg-teal-600 hover:text-white hover:border-teal-600 transition-all active:scale-95 shadow-2xs shrink-0 card-interactive cursor-pointer"
+              >
+                + {s}
+              </button>
+            ))}
+          </div>
         </div>
 
         {/* Messages Container */}
