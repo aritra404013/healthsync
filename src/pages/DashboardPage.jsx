@@ -37,22 +37,16 @@ export default function DashboardPage() {
 
           // Evaluate returning user check-in popup conditions
           const alreadyShown = sessionStorage.getItem('healthsync_welcome_shown');
-          if (!alreadyShown && list.length > 0) {
-            const lastSession = list[0];
-            const lastProblem = lastSession.diagnosis?.conditions?.[0]?.name || lastSession.symptomTags?.join(', ') || '';
-
-            if (lastProblem) {
-              const templates = [
-                `Welcome back! We were thinking of you. Are you feeling better and completely cured of your ${lastProblem} now?`,
-                `Hope you are doing well today! How is your recovery from ${lastProblem} coming along? Are you feeling fully cured?`,
-                `Hello again! We wanted to check in on you. Have you recovered from the ${lastProblem} you shared with our AI earlier?`
-              ];
-              const randomMsg = templates[Math.floor(Math.random() * templates.length)];
-              
-              setWelcomeBackProblem(lastProblem);
-              setWelcomeBackMessage(randomMsg);
-              setShowWelcomeBack(true);
-              sessionStorage.setItem('healthsync_welcome_shown', 'true');
+          if (!alreadyShown && (list.length > 0 || apptRes.value.data?.length > 0)) {
+            try {
+              const checkinRes = await chatAPI.getWelcomeCheckin();
+              if (checkinRes.data && checkinRes.data.message) {
+                setWelcomeBackMessage(checkinRes.data.message);
+                setShowWelcomeBack(true);
+                sessionStorage.setItem('healthsync_welcome_shown', 'true');
+              }
+            } catch (err) {
+              console.warn('Failed to load dynamic welcome checkin:', err);
             }
           }
         } else {

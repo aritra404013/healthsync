@@ -27,7 +27,8 @@ export const authAPI = {
 export const chatAPI = {
   sendMessage: (data) => api.post('/chat/message', data),
   getSessions: () => api.get('/chat/sessions'),
-  getSession: (id) => api.get(`/chat/sessions/${id}`)
+  getSession: (id) => api.get(`/chat/sessions/${id}`),
+  getWelcomeCheckin: () => api.get('/chat/welcome-checkin')
 };
 
 // Doctors

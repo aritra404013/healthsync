@@ -1,6 +1,7 @@
 import express from 'express';
 import mongoose from 'mongoose';
 import ChatSession from '../models/ChatSession.js';
+import Appointment from '../models/Appointment.js';
 import { localDb } from '../config/localDb.js';
 import { sendToGemini } from '../services/geminiService.js';
 import { searchNearby } from '../services/tomtomService.js';
@@ -137,6 +138,56 @@ router.get('/sessions/:id', optionalAuth, async (req, res) => {
     res.json(session);
   } catch (error) {
     res.status(500).json({ message: error.message });
+  }
+});
+
+// GET /api/chat/welcome-checkin — AI-generated custom empathetic greeting for returning users
+router.get('/welcome-checkin', optionalAuth, async (req, res) => {
+  try {
+    if (!req.user) return res.status(401).json({ message: 'Authentication required' });
+    
+    const isDbConnected = mongoose.connection.readyState === 1;
+    let lastSession = null;
+    let lastAppointment = null;
+
+    if (isDbConnected) {
+      lastSession = await ChatSession.findOne({ userId: req.user._id })
+        .sort({ createdAt: -1 });
+        
+      lastAppointment = await Appointment.findOne({ userId: req.user._id })
+        .populate('doctorId', 'name specialty')
+        .sort({ date: -1 });
+    } else {
+      const sesss = localDb.find('chatSessions').filter(s => String(s.userId) === String(req.user._id));
+      if (sesss.length > 0) lastSession = sesss[sesss.length - 1];
+
+      const appts = localDb.find('appointments').filter(a => String(a.userId) === String(req.user._id));
+      if (appts.length > 0) lastAppointment = appts[appts.length - 1];
+    }
+
+    const lastProblem = lastSession?.diagnosis?.conditions?.[0]?.name || lastSession?.symptomTags?.join(', ') || '';
+    const docName = lastAppointment?.doctorId?.name || '';
+    const docSpecialty = lastAppointment?.doctorId?.specialty || '';
+
+    if (!lastProblem && !docName) {
+      return res.json({ message: `Welcome back, ${req.user.name}! We hope you are staying healthy, happy, and energized today. Let us know if we can help with any symptoms! 🌿` });
+    }
+
+    // Dynamic prompt formulation for Gemini AI to draft a caring, non-repeated check-in
+    let prompt = `You are a warm, highly empathetic health companion. Write a welcome back check-in message for "${req.user.name}".`;
+    if (lastProblem) {
+      prompt += `\nTheir last reported health symptom/condition analyzed by our AI was: "${lastProblem}". Ask how they are feeling now and if they are fully cured of it.`;
+    }
+    if (docName) {
+      prompt += `\nThey also booked a medical consultation with doctor: "${docName}" (${docSpecialty}). Ask them specifically how the appointment went and if the doctor treated them well.`;
+    }
+    prompt += `\nMake the message feel extremely personal, warm, comforting, and encouraging. Keep it strictly to 2 to 3 sentences. Do not use preset templates, and ensure it sounds completely natural, non-repetitive, and human-like. Return only the raw greeting message text.`;
+
+    const aiResponse = await sendToGemini([{ role: 'user', content: prompt }]);
+    res.json({ message: aiResponse.text?.trim() || `Welcome back, ${req.user.name}! We hope you are feeling better today. 🌿` });
+  } catch (error) {
+    console.error('Welcome checkin error:', error);
+    res.json({ message: `Welcome back, ${req.user.name}! We hope you are doing well and feeling better today. 🌿` });
   }
 });
 
