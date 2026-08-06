@@ -329,7 +329,7 @@ export default function HealthAnalysisPage() {
       )}
 
       {/* Main Analysis Panel */}
-      <section className="lg:col-span-8 flex flex-col min-h-[600px] lg:h-[calc(100vh-140px)] glass-panel rounded-[2rem] p-5 md:p-8 shadow-xs relative overflow-hidden">
+      <section className="lg:col-span-8 flex flex-col h-[calc(100vh-180px)] md:h-[calc(100vh-140px)] min-h-[500px] glass-panel rounded-[2rem] p-4 md:p-8 shadow-xs relative overflow-hidden">
         {/* Decorative Background Blob */}
         <div className="absolute top-0 right-0 w-80 h-80 bg-teal-300/15 rounded-full blur-3xl pointer-events-none animate-float-blob-1"></div>
 

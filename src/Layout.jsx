@@ -28,26 +28,31 @@ export default function Layout() {
       
       {/* Mobile Bottom Nav */}
       {useSidebar && (
-        <nav className="fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-2 py-2 md:hidden bg-surface-container-lowest/90 backdrop-blur-lg shadow-[0px_-4px_20px_rgba(13,148,136,0.08)] border-t border-surface-variant/80">
-          <Link to="/dashboard" className={`flex flex-col items-center p-2 rounded-xl text-[12px] font-semibold transition-colors ${pathname === '/dashboard' ? 'text-primary' : 'text-on-surface-variant'}`}>
-            <span className="material-symbols-outlined text-[22px]">home</span>
+        <nav className="fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-4 pt-2 pb-4 md:hidden bg-white/90 backdrop-blur-xl shadow-[0px_-4px_25px_rgba(0,131,120,0.12)] border-t border-slate-200/80">
+          <Link to="/dashboard" className={`flex flex-col items-center p-2 rounded-2xl text-[11px] font-extrabold transition-all duration-300 relative ${pathname === '/dashboard' ? 'text-teal-700 scale-105' : 'text-slate-500 hover:text-slate-700'}`}>
+            <span className="material-symbols-outlined text-[23px] mb-0.5">home</span>
             <span>Home</span>
+            {pathname === '/dashboard' && <span className="absolute top-1 right-3 w-1.5 h-1.5 bg-teal-600 rounded-full animate-ping"></span>}
           </Link>
-          <Link to="/analysis" className={`flex flex-col items-center p-2 rounded-xl text-[12px] font-semibold transition-colors ${pathname === '/analysis' ? 'text-primary' : 'text-on-surface-variant'}`}>
-            <span className="material-symbols-outlined text-[22px]">medical_services</span>
+          <Link to="/analysis" className={`flex flex-col items-center p-2 rounded-2xl text-[11px] font-extrabold transition-all duration-300 relative ${pathname === '/analysis' ? 'text-teal-700 scale-105' : 'text-slate-500 hover:text-slate-700'}`}>
+            <span className="material-symbols-outlined text-[23px] mb-0.5">medical_services</span>
             <span>Assess</span>
+            {pathname === '/analysis' && <span className="absolute top-1 right-3 w-1.5 h-1.5 bg-teal-600 rounded-full animate-ping"></span>}
           </Link>
-          <Link to="/prescriptions" className={`flex flex-col items-center p-2 rounded-xl text-[12px] font-semibold transition-colors ${pathname === '/prescriptions' ? 'text-primary' : 'text-on-surface-variant'}`}>
-            <span className="material-symbols-outlined text-[22px]">medication</span>
-            <span>Meds</span>
+          <Link to="/prescriptions" className={`flex flex-col items-center p-2 rounded-2xl text-[11px] font-extrabold transition-all duration-300 relative ${pathname === '/prescriptions' ? 'text-teal-700 scale-105' : 'text-slate-500 hover:text-slate-700'}`}>
+            <span className="material-symbols-outlined text-[23px] mb-0.5">medication</span>
+            <span>Remedies</span>
+            {pathname === '/prescriptions' && <span className="absolute top-1 right-3 w-1.5 h-1.5 bg-teal-600 rounded-full animate-ping"></span>}
           </Link>
-          <Link to="/pharmacies" className={`flex flex-col items-center p-2 rounded-xl text-[12px] font-semibold transition-colors ${pathname === '/pharmacies' ? 'text-primary' : 'text-on-surface-variant'}`}>
-            <span className="material-symbols-outlined text-[22px]">local_pharmacy</span>
+          <Link to="/pharmacies" className={`flex flex-col items-center p-2 rounded-2xl text-[11px] font-extrabold transition-all duration-300 relative ${pathname === '/pharmacies' ? 'text-teal-700 scale-105' : 'text-slate-500 hover:text-slate-700'}`}>
+            <span className="material-symbols-outlined text-[23px] mb-0.5">local_pharmacy</span>
             <span>Pharmacies</span>
+            {pathname === '/pharmacies' && <span className="absolute top-1 right-3 w-1.5 h-1.5 bg-teal-600 rounded-full animate-ping"></span>}
           </Link>
-          <Link to="/doctors" className={`flex flex-col items-center p-2 rounded-xl text-[12px] font-semibold transition-colors ${pathname === '/doctors' ? 'text-primary' : 'text-on-surface-variant'}`}>
-            <span className="material-symbols-outlined text-[22px]">person_search</span>
+          <Link to="/doctors" className={`flex flex-col items-center p-2 rounded-2xl text-[11px] font-extrabold transition-all duration-300 relative ${pathname === '/doctors' ? 'text-teal-700 scale-105' : 'text-slate-500 hover:text-slate-700'}`}>
+            <span className="material-symbols-outlined text-[23px] mb-0.5">person_search</span>
             <span>Doctors</span>
+            {pathname === '/doctors' && <span className="absolute top-1 right-3 w-1.5 h-1.5 bg-teal-600 rounded-full animate-ping"></span>}
           </Link>
         </nav>
       )}
