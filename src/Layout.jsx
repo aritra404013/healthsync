@@ -7,7 +7,7 @@ export default function Layout() {
   const { pathname } = useLocation();
   
   // Use Sidebar for all patient portal internal pages, TopNav for public welcome page
-  const useSidebar = ['/dashboard', '/prescriptions', '/care-plan', '/pharmacies', '/doctors', '/analysis'].some(p => pathname.includes(p)) || pathname.includes('/doctor/');
+  const useSidebar = ['/dashboard', '/prescriptions', '/care-plan', '/pharmacies', '/doctors', '/analysis', '/profile'].some(p => pathname.includes(p)) || pathname.includes('/doctor/');
   // Don't show footer on app-like full height internal portal pages
   const hideFooter = useSidebar;
 

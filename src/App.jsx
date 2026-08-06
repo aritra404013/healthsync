@@ -12,6 +12,7 @@ import DoctorProfilePage from './pages/DoctorProfilePage';
 import AppointmentConfirmedPage from './pages/AppointmentConfirmedPage';
 import PrescriptionsPage from './pages/PrescriptionsPage';
 import PharmaciesPage from './pages/PharmaciesPage';
+import ProfilePage from './pages/ProfilePage';
 
 // Protected route wrapper — redirects to login if not authenticated
 function ProtectedRoute({ children }) {
@@ -49,6 +50,7 @@ function AppRoutes() {
         <Route path="prescriptions" element={<ProtectedRoute><PrescriptionsPage /></ProtectedRoute>} />
         <Route path="pharmacies" element={<PharmaciesPage />} />
         <Route path="doctors" element={<DoctorsPage />} />
+        <Route path="profile" element={<ProtectedRoute><ProfilePage /></ProtectedRoute>} />
       </Route>
     </Routes>
   );

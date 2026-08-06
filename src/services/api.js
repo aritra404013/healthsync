@@ -19,7 +19,8 @@ export const authAPI = {
   register: (data) => api.post('/auth/register', data),
   login: (data) => api.post('/auth/login', data),
   getMe: () => api.get('/auth/me'),
-  updateLocation: (data) => api.put('/auth/location', data)
+  updateLocation: (data) => api.put('/auth/location', data),
+  updateProfile: (data) => api.put('/auth/profile', data)
 };
 
 // Chat (supports { message, sessionId, lat, lng })

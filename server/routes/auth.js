@@ -57,4 +57,35 @@ router.put('/location', protect, async (req, res) => {
   }
 });
 
+// PUT /api/auth/profile — Update user name, email, password, and avatar
+router.put('/profile', protect, async (req, res) => {
+  try {
+    const { name, email, password, profilePicture } = req.body;
+    const user = req.user;
+
+    if (name) user.name = name;
+    if (profilePicture !== undefined) user.profilePicture = profilePicture;
+
+    if (email && email.toLowerCase() !== user.email.toLowerCase()) {
+      const emailExists = await User.findOne({ email: email.toLowerCase() });
+      if (emailExists) {
+        return res.status(400).json({ message: 'Email is already in use by another user' });
+      }
+      user.email = email.toLowerCase();
+    }
+
+    if (password) {
+      if (password.length < 6) {
+        return res.status(400).json({ message: 'Password must be at least 6 characters' });
+      }
+      user.password = password;
+    }
+
+    await user.save();
+    res.json(user);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+});
+
 export default router;

@@ -51,15 +51,15 @@ export default function SideNavBar() {
       {/* User profile section */}
       {isAuthenticated && user && (
         <div className="pt-4 border-t border-slate-200 space-y-3">
-          <div className="flex items-center gap-3 px-2">
-            <div className="w-9 h-9 rounded-full bg-teal-600 text-white flex items-center justify-center text-[14px] font-bold shrink-0 shadow-sm">
-              {user.name?.charAt(0)?.toUpperCase() || 'U'}
+          <Link to="/profile" className="flex items-center gap-3 px-2 hover:bg-slate-50 p-1.5 rounded-xl transition-all group">
+            <div className="w-10 h-10 rounded-xl bg-teal-50 border border-teal-200 flex items-center justify-center text-[22px] shrink-0 shadow-2xs group-hover:scale-105 transition-transform">
+              {user.profilePicture || '🩺'}
             </div>
             <div className="flex-1 min-w-0">
-              <p className="text-[13px] font-bold text-slate-900 truncate">{user.name}</p>
+              <p className="text-[13px] font-bold text-slate-900 truncate group-hover:text-teal-700 transition-colors">{user.name}</p>
               <p className="text-[11px] text-slate-500 font-medium truncate">{user.email}</p>
             </div>
-          </div>
+          </Link>
           <button
             onClick={logout}
             className="w-full flex items-center justify-center gap-2 py-2 rounded-xl text-[13px] font-bold text-slate-500 hover:text-red-600 hover:bg-red-50 border border-slate-200 transition-all cursor-pointer"
