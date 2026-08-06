@@ -134,6 +134,13 @@ export default function DoctorsPage() {
     try {
       const payload = {
         doctorId: selectedDoctor._id || selectedDoctor.id,
+        doctorInfo: {
+          name: selectedDoctor.name,
+          specialty: selectedDoctor.specialty,
+          imageUrl: selectedDoctor.imageUrl || '',
+          address: selectedDoctor.address || selectedDoctor.location?.address || '',
+          phone: selectedDoctor.phone || ''
+        },
         date: bookingDate,
         time: selectedTimeSlot,
         type: consultType,

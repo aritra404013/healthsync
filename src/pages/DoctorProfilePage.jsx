@@ -55,6 +55,13 @@ export default function DoctorProfilePage() {
     const targetDate = dates[selectedDate]?.full || new Date();
     const apptPayload = {
       doctorId: doctor?._id || id,
+      doctorInfo: {
+        name: doctor?.name,
+        specialty: doctor?.specialty,
+        imageUrl: doctor?.imageUrl || '',
+        address: doctor?.address || doctor?.location?.address || '',
+        phone: doctor?.phone || ''
+      },
       date: targetDate.toISOString(),
       time: selectedTime,
       type: selectedType,

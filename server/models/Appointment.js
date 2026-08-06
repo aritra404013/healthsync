@@ -1,8 +1,15 @@
 import mongoose from 'mongoose';
 
 const appointmentSchema = new mongoose.Schema({
-  userId: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
-  doctorId: { type: mongoose.Schema.Types.ObjectId, ref: 'Doctor', required: true },
+  userId: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
+  doctorId: { type: String, required: true },
+  doctorInfo: {
+    name: { type: String, default: '' },
+    specialty: { type: String, default: '' },
+    imageUrl: { type: String, default: '' },
+    address: { type: String, default: '' },
+    phone: { type: String, default: '' }
+  },
   date: { type: Date, required: true },
   time: { type: String, required: true },
   type: { type: String, enum: ['in-person', 'video'], default: 'in-person' },
@@ -13,6 +20,5 @@ const appointmentSchema = new mongoose.Schema({
 }, { timestamps: true });
 
 appointmentSchema.index({ userId: 1, date: -1 });
-appointmentSchema.index({ doctorId: 1, date: 1 });
 
 export default mongoose.model('Appointment', appointmentSchema);

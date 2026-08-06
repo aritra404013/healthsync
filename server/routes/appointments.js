@@ -1,16 +1,32 @@
 import express from 'express';
 import mongoose from 'mongoose';
 import Appointment from '../models/Appointment.js';
-import Doctor from '../models/Doctor.js';
 import { localDb } from '../config/localDb.js';
 import { optionalAuth } from '../middleware/auth.js';
 
 const router = express.Router();
 
+// Helper to format Mongoose appointment to match frontend doctorId structure
+const formatAppointment = (appt) => {
+  if (!appt) return null;
+  const doc = appt.toObject ? appt.toObject() : appt;
+  
+  // Map doctorInfo data back to doctorId key for frontend compatibility
+  doc.doctorId = {
+    _id: doc.doctorId,
+    name: doc.doctorInfo?.name || 'Doctor Consultation',
+    specialty: doc.doctorInfo?.specialty || 'General Practice',
+    imageUrl: doc.doctorInfo?.imageUrl || '',
+    location: { address: doc.doctorInfo?.address || '' },
+    phone: doc.doctorInfo?.phone || ''
+  };
+  return doc;
+};
+
 // POST /api/appointments — Create appointment
 router.post('/', optionalAuth, async (req, res) => {
   try {
-    const { doctorId, date, time, type = 'in-person', reason, notes } = req.body;
+    const { doctorId, doctorInfo, date, time, type = 'in-person', reason, notes } = req.body;
     if (!date || !time) {
       return res.status(400).json({ message: 'date and time are required' });
     }
@@ -18,11 +34,22 @@ router.post('/', optionalAuth, async (req, res) => {
     if (mongoose.connection.readyState === 1) {
       const appointment = await Appointment.create({
         userId: req.user?._id || null,
-        doctorId, date: new Date(date), time, type, reason, notes,
+        doctorId: String(doctorId),
+        doctorInfo: {
+          name: doctorInfo?.name || 'Doctor Consultation',
+          specialty: doctorInfo?.specialty || 'General Practice',
+          imageUrl: doctorInfo?.imageUrl || '',
+          address: doctorInfo?.address || '',
+          phone: doctorInfo?.phone || ''
+        },
+        date: new Date(date),
+        time,
+        type,
+        reason,
+        notes,
         status: 'confirmed'
       });
-      const populated = await appointment.populate('doctorId', 'name specialty imageUrl location');
-      return res.status(201).json(populated);
+      return res.status(201).json(formatAppointment(appointment));
     }
 
     const docInfo = localDb.findById('doctors', doctorId) || localDb.find('doctors')[0];
@@ -53,10 +80,9 @@ router.get('/', optionalAuth, async (req, res) => {
   try {
     if (mongoose.connection.readyState === 1) {
       const query = req.user ? { userId: req.user._id } : {};
-      const appointments = await Appointment.find(query)
-        .populate('doctorId', 'name specialty imageUrl location phone')
-        .sort({ date: -1 });
-      return res.json(appointments);
+      const appointments = await Appointment.find(query).sort({ date: -1 });
+      const transformed = appointments.map(formatAppointment);
+      return res.json(transformed);
     }
     const appointments = localDb.find('appointments');
     res.json(appointments);
@@ -69,9 +95,8 @@ router.get('/', optionalAuth, async (req, res) => {
 router.get('/:id', async (req, res) => {
   try {
     if (mongoose.connection.readyState === 1) {
-      const appointment = await Appointment.findById(req.params.id)
-        .populate('doctorId', 'name specialty imageUrl location phone credentials');
-      if (appointment) return res.json(appointment);
+      const appointment = await Appointment.findById(req.params.id);
+      if (appointment) return res.json(formatAppointment(appointment));
     }
     const found = localDb.findById('appointments', req.params.id) || localDb.find('appointments')[0];
     res.json(found);
@@ -89,8 +114,8 @@ router.patch('/:id', optionalAuth, async (req, res) => {
         req.params.id,
         { ...(status && { status }), ...(notes && { notes }) },
         { new: true }
-      ).populate('doctorId', 'name specialty imageUrl');
-      if (appointment) return res.json(appointment);
+      );
+      if (appointment) return res.json(formatAppointment(appointment));
     }
     const updated = localDb.update('appointments', req.params.id, { ...(status && { status }), ...(notes && { notes }) });
     res.json(updated || localDb.find('appointments')[0]);
