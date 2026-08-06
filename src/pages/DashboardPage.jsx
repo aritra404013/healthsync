@@ -61,7 +61,7 @@ export default function DashboardPage() {
     <div className="w-full px-4 md:px-10 lg:px-16 py-8">
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-8">
         <div className="animate-fade-in">
-          <h1 className="text-[30px] md:text-[36px] leading-[40px] font-extrabold text-on-surface tracking-tight">Patient Dashboard</h1>
+          <h1 className="text-[30px] md:text-[36px] leading-[40px] font-black text-on-surface tracking-tight text-gradient-animated">Patient Dashboard</h1>
           <p className="text-[15px] text-on-surface-variant mt-1 font-medium">Your personal health records, appointments & saved AI treatment plans</p>
         </div>
         <Link to="/analysis" className="bg-primary hover:bg-primary-container text-on-primary text-[15px] font-bold px-6 py-3.5 rounded-xl transition-all duration-300 shadow-glow hover:shadow-glow-hover active:scale-95 flex items-center gap-2 group animate-fade-in">

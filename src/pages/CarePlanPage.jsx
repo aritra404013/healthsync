@@ -151,14 +151,14 @@ export default function CarePlanPage() {
           )}
 
           {/* Header */}
-          <div className="bg-surface-container-lowest rounded-2xl p-6 md:p-8 shadow-soft border border-surface-variant/60">
+          <div className="bg-surface-container-lowest rounded-2xl p-6 md:p-8 shadow-soft border border-surface-variant/60 card-interactive">
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-4">
               <div className="flex items-center gap-4">
                 <div className="w-12 h-12 bg-primary-container rounded-2xl flex items-center justify-center text-on-primary-container shadow-sm shrink-0">
                   <span className="material-symbols-outlined text-2xl">assignment</span>
                 </div>
                 <div>
-                  <h1 className="text-[28px] md:text-[34px] leading-[38px] font-extrabold text-on-surface">Your Care Plan</h1>
+                  <h1 className="text-[28px] md:text-[34px] leading-[38px] font-black text-on-surface text-gradient-animated">Your Care Plan</h1>
                   <p className="text-[14px] text-on-surface-variant font-medium">Personalized recommendations from AI assessment</p>
                 </div>
               </div>

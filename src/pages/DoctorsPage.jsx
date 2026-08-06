@@ -148,12 +148,14 @@ export default function DoctorsPage() {
       )}
 
       {/* Header Banner */}
-      <div className="bg-gradient-to-r from-teal-800 to-slate-900 rounded-[2rem] p-6 md:p-10 text-white mb-8 shadow-md">
-        <div className="max-w-3xl">
-          <span className="px-3.5 py-1 rounded-full bg-teal-600/40 text-teal-200 text-[12px] font-extrabold uppercase tracking-wider border border-teal-500/30">
+      <div className="bg-gradient-to-r from-teal-800 to-slate-900 rounded-[2rem] p-6 md:p-10 text-white mb-8 shadow-md card-interactive relative overflow-hidden">
+        <div className="absolute top-0 right-0 w-80 h-80 bg-teal-400/10 rounded-full blur-3xl pointer-events-none animate-float-blob-1"></div>
+        <div className="max-w-3xl relative z-10">
+          <span className="px-3.5 py-1 rounded-full bg-teal-600/40 text-teal-200 text-[12px] font-extrabold uppercase tracking-wider border border-teal-500/30 badge-glow-teal inline-flex items-center gap-1.5">
+            <span className="material-symbols-outlined text-[15px]">verified</span>
             Verified Doctors & Clinics
           </span>
-          <h1 className="text-[28px] md:text-[38px] font-black leading-tight mt-3 mb-2">
+          <h1 className="text-[28px] md:text-[38px] font-black leading-tight mt-3 mb-2 text-gradient-animated">
             Find Nearby Real Doctors & Book Appointments
           </h1>
           <p className="text-[15px] text-teal-100/90 font-medium">
