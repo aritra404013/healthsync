@@ -17,20 +17,7 @@ export default function CarePlanPage() {
   const [saving, setSaving] = useState(false);
   const [toastMsg, setToastMsg] = useState('');
 
-  const diagnosis = location.state?.diagnosis || {
-    conditions: [
-      { name: 'Tension Headache', probability: 'High', description: 'Common headache resulting from muscle stress, fatigue, or dehydration' }, 
-      { name: 'Migraine', probability: 'Medium', description: 'Neurological condition characterized by pulsating localized discomfort' }
-    ],
-    severity: 'mild',
-    recommendedSpecialties: ['General Practitioner', 'Neurologist'],
-    suggestedMedications: [
-      { name: 'Ibuprofen', dosage: '200-400mg', frequency: 'Every 6-8 hours', notes: 'Take with food' }, 
-      { name: 'Acetaminophen', dosage: '500mg', frequency: 'Every 4-6 hours', notes: 'Do not exceed 3g/day' }
-    ],
-    lifestyleRecommendations: ['Maintain hydration (8+ glasses water)', 'Practice regular posture & screen breaks', 'Ensure 7-8 hours restful sleep'],
-    followUpDays: 7
-  };
+  const diagnosis = location.state?.diagnosis || null;
 
   const handleSavePlan = async () => {
     if (!isAuthenticated) {
@@ -130,6 +117,28 @@ export default function CarePlanPage() {
     Medium: 'bg-amber-100 text-amber-800 font-semibold',
     Low: 'bg-teal-100 text-teal-800 font-semibold'
   };
+
+  if (!diagnosis) {
+    return (
+      <div className="w-full px-4 md:px-10 lg:px-16 py-12 flex flex-col items-center justify-center min-h-[60vh]">
+        <div className="bg-white rounded-3xl p-8 border border-slate-200 shadow-xl max-w-md text-center space-y-5 card-interactive">
+          <div className="w-16 h-16 bg-teal-50 rounded-2xl flex items-center justify-center text-teal-600 mx-auto border border-teal-200/60 shadow-2xs">
+            <span className="material-symbols-outlined text-[32px]">assignment_late</span>
+          </div>
+          <div>
+            <h2 className="text-[20px] font-black text-slate-900">No Active Care Plan</h2>
+            <p className="text-[13.5px] text-slate-500 font-semibold mt-1">
+              Please complete a symptom assessment to generate your personalized AI care plan and Ayurvedic home remedies.
+            </p>
+          </div>
+          <Link to="/analysis" className="btn-primary justify-center py-3.5 text-[14px] w-full">
+            <span className="material-symbols-outlined text-[18px]">vital_signs</span>
+            <span>Start Symptom Assessment</span>
+          </Link>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="w-full px-4 md:px-10 lg:px-16 py-8">

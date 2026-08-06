@@ -116,7 +116,7 @@ export default function PrescriptionsPage() {
         if (extractedRemedies.length > 0) {
           setRemedies(extractedRemedies);
         } else {
-          setRemedies(defaultIndianRemedies);
+          setRemedies([]);
         }
       } catch (e) {
         console.warn('Fallback to default Indian remedies:', e);
