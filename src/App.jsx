@@ -13,6 +13,9 @@ import AppointmentConfirmedPage from './pages/AppointmentConfirmedPage';
 import PrescriptionsPage from './pages/PrescriptionsPage';
 import PharmaciesPage from './pages/PharmaciesPage';
 import ProfilePage from './pages/ProfilePage';
+import ContactPage from './pages/ContactPage';
+import PrivacyPage from './pages/PrivacyPage';
+import TermsPage from './pages/TermsPage';
 
 // Protected route wrapper — redirects to login if not authenticated
 function ProtectedRoute({ children }) {
@@ -51,6 +54,11 @@ function AppRoutes() {
         <Route path="pharmacies" element={<PharmaciesPage />} />
         <Route path="doctors" element={<DoctorsPage />} />
         <Route path="profile" element={<ProtectedRoute><ProfilePage /></ProtectedRoute>} />
+        
+        {/* Public info pages */}
+        <Route path="contact" element={<ContactPage />} />
+        <Route path="privacy" element={<PrivacyPage />} />
+        <Route path="terms" element={<TermsPage />} />
       </Route>
     </Routes>
   );

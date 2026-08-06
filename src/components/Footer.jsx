@@ -9,12 +9,12 @@ export default function Footer() {
           <span className="text-[20px] font-semibold text-primary">HealthSync AI</span>
         </div>
         <p className="text-[14px] text-on-surface-variant text-center md:text-left">
-          © 2024 HealthSync AI. Precise. Calm. Reliable.
+          © 2026 HealthSync AI. Precise. Calm. Reliable.
         </p>
         <nav className="flex gap-6">
-          <a className="text-[12px] font-medium text-on-surface-variant hover:text-primary transition-colors" href="#">Contact Info</a>
-          <a className="text-[12px] font-medium text-on-surface-variant hover:text-primary transition-colors" href="#">Privacy Policy</a>
-          <a className="text-[12px] font-medium text-on-surface-variant hover:text-primary transition-colors" href="#">Terms of Service</a>
+          <Link className="text-[12px] font-bold text-on-surface-variant hover:text-primary transition-colors" to="/contact">Contact Info</Link>
+          <Link className="text-[12px] font-bold text-on-surface-variant hover:text-primary transition-colors" to="/privacy">Privacy Policy</Link>
+          <Link className="text-[12px] font-bold text-on-surface-variant hover:text-primary transition-colors" to="/terms">Terms of Service</Link>
         </nav>
       </div>
     </footer>
