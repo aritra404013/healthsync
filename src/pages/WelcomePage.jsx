@@ -3,6 +3,42 @@ import { Link } from 'react-router-dom';
 
 export default function WelcomePage() {
   const [activeTab, setActiveTab] = useState('triage');
+  const [selectedSymptom, setSelectedSymptom] = useState('fever');
+
+  const symptomsData = {
+    fever: {
+      name: 'High Fever (103°F)',
+      category: 'Practice',
+      practice: 'Geeli Patti / Cold Compress (गीली पट्टी)',
+      recipe: 'Soak cotton cloth in room-temp water. Place on forehead & wrists. Change every 5-10 mins to bring down temperature.',
+      doctorDistance: '0.8 km',
+      badgeColor: 'bg-teal-100 text-teal-800 border-teal-300'
+    },
+    cold: {
+      name: 'Severe Cold & Cough',
+      category: 'Recipe',
+      practice: 'Ayurvedic Tulsi-Ginger Kadha',
+      recipe: 'Boil 8 Tulsi leaves + 1-inch Ginger + 2 Cloves in 2 cups water down to 1 cup. Add 1 tsp honey while warm.',
+      doctorDistance: '1.2 km',
+      badgeColor: 'bg-amber-100 text-amber-800 border-amber-300'
+    },
+    stomach: {
+      name: 'Stomach Pain & Gas',
+      category: 'Recipe',
+      practice: 'Ajwain-Jeera Warm Decoction',
+      recipe: 'Boil 1/2 tsp Ajwain + 1/2 tsp Cumin in 1 glass water for 5 mins. Sip warm after meals for fast relief.',
+      doctorDistance: '1.5 km',
+      badgeColor: 'bg-amber-100 text-amber-800 border-amber-300'
+    },
+    headache: {
+      name: 'Throbbing Headache',
+      category: 'Practice',
+      practice: 'Chandan / Mint forehead application',
+      recipe: 'Apply cooling mint or sandalwood paste on forehead. Rest in a dark, quiet room and drink 2 glasses water.',
+      doctorDistance: '0.5 km',
+      badgeColor: 'bg-teal-100 text-teal-800 border-teal-300'
+    }
+  };
 
   const stats = [
     { label: 'Clinical Evaluations', value: '15,000+', icon: 'medical_services', color: 'from-teal-600 to-emerald-700' },
@@ -88,40 +124,75 @@ export default function WelcomePage() {
     <main className="min-h-screen bg-slate-50 selection:bg-teal-500/20 selection:text-teal-700 overflow-x-hidden">
       {/* HERO SECTION */}
       <section className="relative pt-8 pb-20 lg:pt-16 lg:pb-32 overflow-hidden hero-gradient-bg border-b border-teal-100/80">
-        <div className="absolute top-1/4 left-10 w-96 h-96 bg-teal-300/30 rounded-full blur-3xl pointer-events-none animate-pulse-glow"></div>
-        <div className="absolute bottom-10 right-10 w-96 h-96 bg-emerald-300/20 rounded-full blur-3xl pointer-events-none animate-float"></div>
+        {/* Animated Background Mesh Blobs */}
+        <div className="absolute top-10 left-10 w-96 h-96 bg-teal-300/30 rounded-full blur-3xl pointer-events-none animate-float-blob-1"></div>
+        <div className="absolute bottom-10 right-10 w-96 h-96 bg-emerald-300/25 rounded-full blur-3xl pointer-events-none animate-float-blob-2"></div>
 
         <div className="max-w-[1440px] w-full mx-auto px-4 sm:px-6 md:px-12 grid lg:grid-cols-12 gap-12 lg:gap-8 items-center relative z-10">
           
           {/* Hero Left Column */}
           <div className="lg:col-span-7 flex flex-col gap-6 animate-fade-in">
             
-            {/* Pill Badge */}
-            <div className="inline-flex items-center gap-2.5 bg-gradient-to-r from-teal-500/10 via-emerald-500/15 to-teal-500/10 text-teal-900 px-4 py-2 rounded-full w-fit border border-teal-300/80 text-[13px] font-extrabold tracking-wide uppercase shadow-2xs backdrop-blur-md">
+            {/* Pill Badge with Pulse */}
+            <div className="inline-flex items-center gap-2.5 bg-gradient-to-r from-teal-500/10 via-emerald-500/15 to-teal-500/10 text-teal-900 px-4 py-2 rounded-full w-fit border border-teal-300/80 text-[13px] font-extrabold tracking-wide uppercase shadow-2xs backdrop-blur-md badge-glow-teal animate-pulse-soft">
               <span className="relative flex h-2.5 w-2.5">
                 <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-teal-500 opacity-75"></span>
                 <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-teal-600"></span>
               </span>
               <span className="flex items-center gap-1.5">
-                <span className="material-symbols-outlined text-[16px] text-teal-700">clinical_notes</span>
+                <span className="material-symbols-outlined text-[18px] text-teal-700">clinical_notes</span>
                 AI Health Navigator & Desi Remedy Engine 2.0
               </span>
             </div>
             
-            {/* Hero Main Heading */}
-            <div className="flex flex-col gap-4">
+            {/* Hero Main Heading with Animated Gradient */}
+            <div className="flex flex-col gap-3">
               <h1 className="text-[38px] sm:text-[54px] lg:text-[64px] leading-[1.08] font-black tracking-tight text-slate-900">
                 Instant AI Triage & <br />
-                <span className="text-gradient">Ayurvedic Home Care</span>
+                <span className="text-gradient-animated">Ayurvedic Home Care</span>
               </h1>
               <p className="text-[17px] md:text-[20px] leading-relaxed text-slate-600 max-w-2xl font-medium">
                 Describe your symptoms to receive instant clinical evaluation, auto-detected GPS doctor recommendations, and personalized authentic Indian home remedies (Kadha, Geeli Patti & traditional care).
               </p>
             </div>
 
+            {/* JOYFUL INTERACTIVE QUICK-SCANNER BUTTONS */}
+            <div className="bg-white/80 backdrop-blur-md p-4 rounded-2xl border border-teal-200/80 shadow-md max-w-xl my-1">
+              <div className="flex items-center justify-between mb-2.5">
+                <span className="text-[12px] font-extrabold text-slate-700 uppercase tracking-wider flex items-center gap-1.5">
+                  <span className="material-symbols-outlined text-[16px] text-teal-600">touch_app</span>
+                  Try Quick AI Symptom Scanner:
+                </span>
+                <span className="text-[11px] font-bold text-teal-700 bg-teal-50 px-2 py-0.5 rounded-full border border-teal-200">
+                  Tap to preview
+                </span>
+              </div>
+              <div className="flex flex-wrap gap-2">
+                {[
+                  { key: 'fever', label: 'Fever 103°F', icon: 'thermostat' },
+                  { key: 'cold', label: 'Severe Cold', icon: 'ac_unit' },
+                  { key: 'stomach', label: 'Stomach Pain', icon: 'digestive_system' },
+                  { key: 'headache', label: 'Headache', icon: 'headache' }
+                ].map((item) => (
+                  <button
+                    key={item.key}
+                    onClick={() => setSelectedSymptom(item.key)}
+                    className={`px-3 py-1.5 rounded-xl text-[12.5px] font-bold transition-all flex items-center gap-1.5 cursor-pointer ${
+                      selectedSymptom === item.key
+                        ? 'bg-teal-600 text-white shadow-md scale-105'
+                        : 'bg-slate-100 text-slate-700 hover:bg-teal-50 hover:text-teal-800'
+                    }`}
+                  >
+                    <span className="material-symbols-outlined text-[16px]">{item.icon}</span>
+                    <span>{item.label}</span>
+                  </button>
+                ))}
+              </div>
+            </div>
+
             {/* CTA Buttons */}
-            <div className="flex flex-wrap gap-4 mt-2 items-center">
-              <Link to="/analysis" className="btn-primary text-[16px] py-4 px-8 shadow-lg hover:shadow-teal-500/30 active:scale-98 transition-all">
+            <div className="flex flex-wrap gap-4 items-center">
+              <Link to="/analysis" className="btn-primary text-[16px] py-4 px-8 shadow-lg hover:shadow-teal-500/30 active:scale-98 transition-all card-interactive">
                 <span className="material-symbols-outlined text-[22px]">vital_signs</span>
                 <span>Start Symptom Analysis</span>
                 <span className="material-symbols-outlined text-[20px]">arrow_forward</span>
@@ -133,82 +204,96 @@ export default function WelcomePage() {
             </div>
             
             {/* Trust Indicators */}
-            <div className="flex flex-wrap items-center gap-6 mt-6 pt-6 border-t border-slate-200/80">
+            <div className="flex flex-wrap items-center gap-6 pt-4 border-t border-slate-200/80">
               <div className="flex -space-x-3 shrink-0">
-                <img className="w-12 h-12 rounded-full border-2 border-white object-cover shadow-md z-30" src="https://images.unsplash.com/photo-1559839734-2b71ea197ec2?w=120&auto=format&fit=crop&q=80" alt="Doctor" />
-                <img className="w-12 h-12 rounded-full border-2 border-white object-cover shadow-md z-20" src="https://images.unsplash.com/photo-1622253692010-333f2da6031d?w=120&auto=format&fit=crop&q=80" alt="Doctor" />
-                <img className="w-12 h-12 rounded-full border-2 border-white object-cover shadow-md z-10" src="https://images.unsplash.com/photo-1594824813566-78a933758f46?w=120&auto=format&fit=crop&q=80" alt="Doctor" />
+                <img className="w-11 h-11 rounded-full border-2 border-white object-cover shadow-md z-30" src="https://images.unsplash.com/photo-1559839734-2b71ea197ec2?w=120&auto=format&fit=crop&q=80" alt="Doctor" />
+                <img className="w-11 h-11 rounded-full border-2 border-white object-cover shadow-md z-20" src="https://images.unsplash.com/photo-1622253692010-333f2da6031d?w=120&auto=format&fit=crop&q=80" alt="Doctor" />
+                <img className="w-11 h-11 rounded-full border-2 border-white object-cover shadow-md z-10" src="https://images.unsplash.com/photo-1594824813566-78a933758f46?w=120&auto=format&fit=crop&q=80" alt="Doctor" />
               </div>
               <div className="flex flex-col">
-                <div className="flex items-center gap-1.5 text-amber-500 text-[14px]">
-                  <span className="material-symbols-outlined filled text-[18px]">star</span>
-                  <span className="material-symbols-outlined filled text-[18px]">star</span>
-                  <span className="material-symbols-outlined filled text-[18px]">star</span>
-                  <span className="material-symbols-outlined filled text-[18px]">star</span>
-                  <span className="material-symbols-outlined filled text-[18px]">star</span>
-                  <span className="text-slate-900 font-extrabold text-[15px] ml-1">4.9 / 5.0</span>
+                <div className="flex items-center gap-1 text-amber-500 text-[14px]">
+                  {[...Array(5)].map((_, i) => (
+                    <span key={i} className="material-symbols-outlined filled text-[17px]">star</span>
+                  ))}
+                  <span className="text-slate-900 font-extrabold text-[14px] ml-1">4.9 / 5.0</span>
                 </div>
-                <span className="text-[13px] text-slate-500 font-semibold mt-0.5">Trusted by 15,000+ patients across India</span>
+                <span className="text-[12.5px] text-slate-500 font-semibold">Trusted by 15,000+ patients across India</span>
               </div>
             </div>
 
           </div>
           
-          {/* Hero Right Column */}
+          {/* Hero Right Column — DYNAMIC REACTION PREVIEW CARD */}
           <div className="lg:col-span-5 relative z-10 flex justify-center items-center">
             <div className="relative w-full max-w-[500px]">
               
-              {/* Main Display Glass Panel */}
-              <div className="relative rounded-[2.5rem] p-4 bg-white/90 backdrop-blur-xl border border-teal-200/80 shadow-2xl overflow-hidden group">
-                <div className="relative h-[340px] sm:h-[380px] rounded-[2rem] overflow-hidden">
-                  <img 
-                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-out" 
-                    src="https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?w=900&auto=format&fit=crop&q=80" 
-                    alt="HealthSync AI Consultation" 
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-slate-950/20 to-transparent"></div>
+              {/* Main Display Card */}
+              <div className="relative rounded-[2.5rem] p-4 bg-white/95 backdrop-blur-xl border-2 border-teal-200 shadow-2xl overflow-hidden card-interactive">
+                
+                {/* SVG Cardiac Pulse Line Graphic */}
+                <div className="absolute top-0 left-0 right-0 h-1.5 bg-gradient-to-r from-teal-500 via-emerald-400 to-teal-600"></div>
 
-                  {/* Top Status Pill inside Image */}
-                  <div className="absolute top-4 left-4 right-4 flex justify-between items-center z-10">
-                    <div className="bg-slate-900/80 backdrop-blur-md text-white px-3.5 py-1.5 rounded-full text-[12px] font-bold flex items-center gap-2 border border-white/20">
-                      <span className="w-2 h-2 rounded-full bg-emerald-400 animate-ping"></span>
-                      <span>Live AI Symptom Engine</span>
+                <div className="p-4 space-y-4">
+                  
+                  {/* Top Live Badge */}
+                  <div className="flex justify-between items-center pb-3 border-b border-slate-100">
+                    <div className="flex items-center gap-2">
+                      <span className="material-symbols-outlined text-[20px] text-teal-600 animate-pulse">ecg_heart</span>
+                      <span className="text-[13px] font-extrabold text-slate-900">Live AI Reaction</span>
                     </div>
-                    <span className="bg-teal-600 text-white text-[11px] font-extrabold px-3 py-1 rounded-full uppercase tracking-wider shadow-sm">
-                      GPS Active
+                    <span className={`px-2.5 py-0.5 rounded-full text-[11px] font-bold border ${symptomsData[selectedSymptom].badgeColor}`}>
+                      {symptomsData[selectedSymptom].category}
                     </span>
                   </div>
 
-                  {/* Bottom Text Overlay inside Image */}
-                  <div className="absolute bottom-5 left-5 right-5 text-white z-10">
-                    <span className="text-[12px] font-extrabold uppercase tracking-wider text-teal-300">Clinical AI + Desi Care</span>
-                    <h3 className="text-[20px] font-black leading-tight mt-0.5">Comprehensive Health Evaluation</h3>
+                  {/* Selected Symptom Title */}
+                  <div>
+                    <span className="text-[11px] font-extrabold uppercase text-slate-400 tracking-wider">Detected Symptom</span>
+                    <h4 className="text-[17px] font-black text-slate-900 mt-0.5">
+                      {symptomsData[selectedSymptom].name}
+                    </h4>
                   </div>
+
+                  {/* Recommended Desi Remedy Card */}
+                  <div className="p-3.5 bg-teal-50/90 rounded-2xl border border-teal-200/90 space-y-1.5 transition-all">
+                    <div className="flex items-center gap-2 text-teal-900 font-extrabold text-[13.5px]">
+                      <span className="material-symbols-outlined text-[18px] text-teal-700">self_improvement</span>
+                      <span>{symptomsData[selectedSymptom].practice}</span>
+                    </div>
+                    <p className="text-[12.5px] text-slate-700 font-medium leading-relaxed">
+                      {symptomsData[selectedSymptom].recipe}
+                    </p>
+                  </div>
+
+                  {/* Auto GPS Doctor Badge */}
+                  <div className="flex items-center justify-between p-3 bg-blue-50/90 rounded-xl border border-blue-200 text-[12px]">
+                    <div className="flex items-center gap-2 text-blue-900 font-bold">
+                      <span className="material-symbols-outlined text-[18px] text-blue-600">location_on</span>
+                      <span>Top Specialist Matched</span>
+                    </div>
+                    <span className="font-extrabold text-blue-700 bg-white px-2 py-0.5 rounded-md border border-blue-200">
+                      {symptomsData[selectedSymptom].doctorDistance} away
+                    </span>
+                  </div>
+
+                  <Link to="/analysis" className="btn-primary w-full justify-center py-3 text-[14px] shadow-md">
+                    <span>Analyze Your Own Symptoms</span>
+                    <span className="material-symbols-outlined text-[18px]">arrow_forward</span>
+                  </Link>
+
                 </div>
               </div>
 
-              {/* Floating Animated Widget 1: Emergency & Doctor Alert */}
-              <div className="absolute -top-6 -right-4 sm:-right-6 glass-panel p-3.5 sm:p-4 rounded-2xl flex items-center gap-3 shadow-xl border border-red-200/80 bg-white/95 animate-float z-20 max-w-[250px]">
-                <div className="w-10 h-10 rounded-xl bg-red-100 text-red-600 flex items-center justify-center shrink-0 shadow-sm font-bold">
-                  <span className="material-symbols-outlined text-[22px]">location_on</span>
-                </div>
-                <div className="flex flex-col min-w-0">
-                  <span className="text-[10px] font-black uppercase text-red-600 tracking-wider">Auto GPS Detected</span>
-                  <span className="text-[13px] font-extrabold text-slate-900 truncate">3 Nearby Doctors Found</span>
-                  <span className="text-[11px] font-semibold text-slate-500">0.8 km distance</span>
-                </div>
+              {/* Floating Badge 1 */}
+              <div className="absolute -top-5 -right-4 glass-panel p-3 rounded-2xl flex items-center gap-2.5 shadow-xl border border-teal-200 bg-white/95 animate-float z-20">
+                <span className="material-symbols-outlined text-teal-600 text-[20px]">check_circle</span>
+                <span className="text-[12px] font-extrabold text-slate-900">100% Authentic Indian Care</span>
               </div>
 
-              {/* Floating Animated Widget 2: Ayurvedic Home Remedy Badge */}
-              <div className="absolute -bottom-6 -left-4 sm:-left-6 glass-panel p-3.5 sm:p-4 rounded-2xl flex items-center gap-3 shadow-xl border border-amber-300/80 bg-white/95 animate-float-reverse z-20 max-w-[270px]">
-                <div className="w-10 h-10 rounded-xl bg-amber-100 text-amber-700 flex items-center justify-center shrink-0 shadow-sm font-bold">
-                  <span className="material-symbols-outlined text-[22px]">eco</span>
-                </div>
-                <div className="flex flex-col min-w-0">
-                  <span className="text-[10px] font-black uppercase text-amber-800 tracking-wider">AI Desi Remedy</span>
-                  <span className="text-[13px] font-extrabold text-slate-900 truncate">Geeli Patti & Tulsi Kadha</span>
-                  <span className="text-[11px] font-semibold text-emerald-700">100% Personalized</span>
-                </div>
+              {/* Floating Badge 2 */}
+              <div className="absolute -bottom-5 -left-4 glass-panel p-3 rounded-2xl flex items-center gap-2.5 shadow-xl border border-amber-300 bg-white/95 animate-float-reverse z-20">
+                <span className="material-symbols-outlined text-amber-600 text-[20px]">eco</span>
+                <span className="text-[12px] font-extrabold text-slate-900">Ayurvedic AI Engine</span>
               </div>
 
             </div>
@@ -217,13 +302,13 @@ export default function WelcomePage() {
         </div>
       </section>
 
-      {/* LIVE METRICS / STATS BAR */}
+      {/* LIVE METRICS / STATS BAR WITH SPRING PHYSICS */}
       <section className="py-10 bg-slate-900 text-white relative z-20 border-y border-slate-800">
         <div className="max-w-[1440px] w-full mx-auto px-6 md:px-12 grid grid-cols-2 lg:grid-cols-4 gap-6 md:gap-8">
           {stats.map((item, idx) => (
-            <div key={idx} className="stat-card p-5 md:p-6 rounded-2xl bg-slate-800/80 border border-slate-700/80 flex flex-col gap-2 hover:border-teal-500/50 transition-all group">
+            <div key={idx} className="stat-card p-5 md:p-6 rounded-2xl bg-slate-800/80 border border-slate-700/80 flex flex-col gap-2 hover:border-teal-500/50 transition-all card-interactive group">
               <div className="flex items-center justify-between">
-                <span className="text-[13px] font-bold text-slate-400 uppercase tracking-wider">{item.label}</span>
+                <span className="text-[12.5px] font-bold text-slate-400 uppercase tracking-wider">{item.label}</span>
                 <div className={`w-9 h-9 rounded-xl bg-gradient-to-br ${item.color} flex items-center justify-center text-white shadow-sm group-hover:scale-110 transition-transform`}>
                   <span className="material-symbols-outlined text-[20px]">{item.icon}</span>
                 </div>
@@ -275,7 +360,7 @@ export default function WelcomePage() {
 
           {/* Active Tab Content Card */}
           {features.filter(f => f.id === activeTab).map((feat) => (
-            <div key={feat.id} className="grid lg:grid-cols-12 gap-8 items-center bg-gradient-to-br from-slate-50 to-teal-50/40 p-6 md:p-10 rounded-[2.5rem] border border-teal-100 shadow-xl animate-fade-in">
+            <div key={feat.id} className="grid lg:grid-cols-12 gap-8 items-center bg-gradient-to-br from-slate-50 to-teal-50/40 p-6 md:p-10 rounded-[2.5rem] border border-teal-100 shadow-xl animate-fade-in card-interactive">
               <div className="lg:col-span-6 flex flex-col gap-5">
                 <span className="px-3.5 py-1 bg-teal-100 text-teal-800 text-[12px] font-extrabold rounded-full w-fit uppercase tracking-wider border border-teal-300">
                   {feat.badge}
@@ -327,7 +412,7 @@ export default function WelcomePage() {
         <div className="max-w-[1440px] w-full mx-auto px-6 md:px-12 grid lg:grid-cols-12 gap-10 items-center">
           
           <div className="lg:col-span-6 flex flex-col gap-6">
-            <div className="inline-flex items-center gap-2 bg-amber-100 text-amber-900 px-4 py-1.5 rounded-full w-fit border border-amber-300 text-[12px] font-extrabold uppercase tracking-wider">
+            <div className="inline-flex items-center gap-2 bg-amber-100 text-amber-900 px-4 py-1.5 rounded-full w-fit border border-amber-300 text-[12px] font-extrabold uppercase tracking-wider badge-glow-amber">
               <span className="material-symbols-outlined text-[18px] text-amber-800">eco</span>
               <span>Authentic Indian Household Care</span>
             </div>
@@ -342,7 +427,7 @@ export default function WelcomePage() {
             </p>
 
             <div className="grid sm:grid-cols-2 gap-4">
-              <div className="bg-white p-4 rounded-2xl border border-amber-200 shadow-2xs">
+              <div className="bg-white p-4 rounded-2xl border border-amber-200 shadow-2xs card-interactive">
                 <div className="flex items-center gap-2 mb-2 text-amber-800 font-extrabold text-[15px]">
                   <span className="material-symbols-outlined text-[20px] text-amber-700">soup_kitchen</span>
                   <span>Herbal Recipes</span>
@@ -350,7 +435,7 @@ export default function WelcomePage() {
                 <p className="text-[13px] text-slate-600 font-medium">Tulsi-Ginger Kadha, Haldi Doodh, Ajwain Jeera water with exact ingredient ratios.</p>
               </div>
 
-              <div className="bg-white p-4 rounded-2xl border border-teal-200 shadow-2xs">
+              <div className="bg-white p-4 rounded-2xl border border-teal-200 shadow-2xs card-interactive">
                 <div className="flex items-center gap-2 mb-2 text-teal-800 font-extrabold text-[15px]">
                   <span className="material-symbols-outlined text-[20px] text-teal-700">self_improvement</span>
                   <span>Traditional Practices</span>
@@ -361,7 +446,7 @@ export default function WelcomePage() {
           </div>
 
           <div className="lg:col-span-6">
-            <div className="bg-white p-6 sm:p-8 rounded-[2.5rem] border-2 border-amber-300 shadow-2xl space-y-4 relative overflow-hidden">
+            <div className="bg-white p-6 sm:p-8 rounded-[2.5rem] border-2 border-amber-300 shadow-2xl space-y-4 relative overflow-hidden card-interactive">
               <div className="flex items-center justify-between border-b border-slate-200 pb-4">
                 <div className="flex items-center gap-2">
                   <span className="material-symbols-outlined text-[24px] text-amber-700">eco</span>
@@ -420,7 +505,7 @@ export default function WelcomePage() {
 
           <div className="grid md:grid-cols-3 gap-8">
             {testimonials.map((t, idx) => (
-              <div key={idx} className="bg-slate-50 hover:bg-white p-8 rounded-[2rem] border border-slate-200 shadow-2xs hover:shadow-xl transition-all duration-300 flex flex-col justify-between group">
+              <div key={idx} className="bg-slate-50 hover:bg-white p-8 rounded-[2rem] border border-slate-200 shadow-2xs hover:shadow-xl transition-all duration-300 flex flex-col justify-between group card-interactive">
                 <div className="space-y-4">
                   <div className="flex items-center gap-1 text-amber-500">
                     {[...Array(t.rating)].map((_, i) => (
@@ -464,7 +549,7 @@ export default function WelcomePage() {
           </div>
 
           <div className="shrink-0">
-            <Link to="/analysis" className="btn-secondary text-[17px] py-4 px-9 bg-white text-teal-900 font-black hover:bg-teal-50 shadow-2xl transition-all border-none">
+            <Link to="/analysis" className="btn-secondary text-[17px] py-4 px-9 bg-white text-teal-900 font-black hover:bg-teal-50 shadow-2xl transition-all border-none card-interactive">
               <span>Launch AI Symptom Triage</span>
               <span className="material-symbols-outlined text-[20px]">arrow_forward</span>
             </Link>

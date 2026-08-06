@@ -286,3 +286,71 @@
   animation: shimmer 3s ease-in-out infinite;
   pointer-events: none;
 }
+
+/* Joyful Micro-Interactions & Motion Design */
+@keyframes heartbeatPulse {
+  0% { stroke-dashoffset: 600; }
+  50% { stroke-dashoffset: 0; }
+  100% { stroke-dashoffset: -600; }
+}
+
+@keyframes pulseSoft {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.06); }
+}
+
+@keyframes floatBlob {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  33% { transform: translate(30px, -20px) scale(1.08); }
+  66% { transform: translate(-20px, 20px) scale(0.95); }
+}
+
+@keyframes textGradientFlow {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+.animate-heartbeat-line {
+  stroke-dasharray: 600;
+  animation: heartbeatPulse 4s linear infinite;
+}
+
+.animate-pulse-soft {
+  animation: pulseSoft 2.5s ease-in-out infinite;
+}
+
+.animate-float-blob-1 {
+  animation: floatBlob 14s ease-in-out infinite;
+}
+
+.animate-float-blob-2 {
+  animation: floatBlob 18s ease-in-out infinite reverse;
+}
+
+.text-gradient-animated {
+  background: linear-gradient(135deg, #008378 0%, #00bfa5 40%, #0284c7 70%, #008378 100%);
+  background-size: 300% 300%;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: textGradientFlow 8s ease infinite;
+}
+
+/* Interactive Card Elevation & Spring Physics */
+.card-interactive {
+  transition: all 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.card-interactive:hover {
+  transform: translateY(-6px) scale(1.015);
+  box-shadow: 0 20px 40px -15px rgba(0, 131, 120, 0.18), 0 8px 20px -6px rgba(0, 0, 0, 0.04);
+}
+
+.badge-glow-teal {
+  box-shadow: 0 0 15px rgba(0, 131, 120, 0.25);
+}
+
+.badge-glow-amber {
+  box-shadow: 0 0 15px rgba(217, 119, 6, 0.25);
+}
+
