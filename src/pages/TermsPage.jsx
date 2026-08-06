@@ -14,7 +14,7 @@ export default function TermsPage() {
       </div>
 
       <div className="bg-white rounded-3xl p-6 md:p-10 border border-slate-200/80 shadow-soft card-interactive space-y-8 text-[14px] text-slate-700 leading-relaxed font-semibold">
-        
+
         <section className="space-y-3">
           <h2 className="text-[20px] font-black text-slate-900 flex items-center gap-2 border-b border-slate-100 pb-2">
             <span className="text-teal-600">1.</span> Agreement & Binding Scope
@@ -29,7 +29,7 @@ export default function TermsPage() {
 
         <section className="space-y-3 bg-amber-50/50 p-5 rounded-2xl border border-amber-200/60">
           <h2 className="text-[20px] font-black text-amber-900 flex items-center gap-2 border-b border-amber-200 pb-2">
-            ⚠️ Medical Disclaimer & Emergency Protocols
+            Medical Disclaimer & Emergency Protocols
           </h2>
           <p className="text-amber-900">
             <strong>HEALTHSYNC AI DOES NOT PROVIDE PROFESSIONAL MEDICAL ADVICE, DIAGNOSIS, OR TREATMENT.</strong> The artificial intelligence algorithms, symptom evaluations, Ayurvedic suggestions, and geographical provider mappings generated through the Services are for clinical preliminary informational guidance and informational purposes only.
