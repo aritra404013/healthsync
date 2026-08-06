@@ -348,8 +348,8 @@ export default function DoctorsPage() {
             </div>
           </div>
 
-          {/* Right Real Map View Column */}
-          <div className="lg:col-span-5 sticky top-24 h-[600px] rounded-3xl overflow-hidden shadow-md border border-slate-200">
+          {/* Right Real Map View Column (Desktop Only for Layout Performance) */}
+          <div className="hidden lg:block lg:col-span-5 sticky top-24 h-[600px] rounded-3xl overflow-hidden shadow-md border border-slate-200">
             <RealMapView
               items={filteredDoctors}
               userLoc={{ lat: 19.0760, lng: 72.8777 }}
