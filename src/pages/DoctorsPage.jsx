@@ -14,6 +14,8 @@ export default function DoctorsPage() {
   const [locationCity, setLocationCity] = useState('');
   const [selectedDocId, setSelectedDocId] = useState(null);
   const [toast, setToast] = useState(null);
+  const [userLocation, setUserLocation] = useState({ lat: 19.0760, lng: 72.8777 }); // Default to Mumbai fallback
+  const [hasLocated, setHasLocated] = useState(false);
 
   // Booking Modal State
   const [selectedDoctor, setSelectedDoctor] = useState(null);
@@ -25,8 +27,34 @@ export default function DoctorsPage() {
   const [reason, setReason] = useState('');
   const [bookingLoading, setBookingLoading] = useState(false);
 
+  // 1. Initial mounting: Ask for GPS location automatically
   useEffect(() => {
-    loadDoctors();
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+        (pos) => {
+          const { latitude, longitude } = pos.coords;
+          setUserLocation({ lat: latitude, lng: longitude });
+          setHasLocated(true);
+          setLocationCity('Current GPS Location');
+          loadDoctors(latitude, longitude);
+        },
+        (err) => {
+          console.warn('GPS location request denied or failed on load:', err);
+          setHasLocated(true);
+          loadDoctors(19.0760, 72.8777); // Load Mumbai fallback
+        }
+      );
+    } else {
+      setHasLocated(true);
+      loadDoctors(19.0760, 72.8777);
+    }
+  }, []);
+
+  // 2. Trigger doctor reload when selectedSpecialty changes (after initial location step completes)
+  useEffect(() => {
+    if (hasLocated) {
+      loadDoctors(userLocation.lat, userLocation.lng);
+    }
   }, [selectedSpecialty]);
 
   const loadDoctors = async (customLat = null, customLng = null) => {
@@ -35,9 +63,14 @@ export default function DoctorsPage() {
       const params = {};
       if (selectedSpecialty !== 'All Specialties') params.specialty = selectedSpecialty;
       if (locationCity && locationCity !== 'Current GPS Location') params.city = locationCity;
-      if (customLat && customLng) {
-        params.lat = customLat;
-        params.lng = customLng;
+      
+      // Use coordinates if passed, or fall back to userLocation state
+      const queryLat = customLat !== null ? customLat : userLocation.lat;
+      const queryLng = customLng !== null ? customLng : userLocation.lng;
+      
+      if (queryLat && queryLng) {
+        params.lat = queryLat;
+        params.lng = queryLng;
       }
       if (searchQuery) params.search = searchQuery;
 
@@ -65,9 +98,11 @@ export default function DoctorsPage() {
       setLoading(true);
       navigator.geolocation.getCurrentPosition(
         (pos) => {
+          const { latitude, longitude } = pos.coords;
+          setUserLocation({ lat: latitude, lng: longitude });
           setLocationCity('Current GPS Location');
           showToast('Live GPS Location acquired! Searching nearby real doctors...');
-          loadDoctors(pos.coords.latitude, pos.coords.longitude);
+          loadDoctors(latitude, longitude);
         },
         (err) => {
           showToast('Could not fetch GPS. Please type your city name.');
@@ -352,7 +387,7 @@ export default function DoctorsPage() {
           <div className="hidden lg:block lg:col-span-5 sticky top-24 h-[600px] rounded-3xl overflow-hidden shadow-md border border-slate-200">
             <RealMapView
               items={filteredDoctors}
-              userLoc={{ lat: 19.0760, lng: 72.8777 }}
+              userLoc={userLocation}
               selectedId={selectedDocId}
               onSelectItem={(id) => setSelectedDocId(id)}
               isDoctors={true}
