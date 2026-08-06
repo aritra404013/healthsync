@@ -2,15 +2,6 @@ import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { appointmentsAPI, chatAPI, treatmentPlansAPI } from '../services/api';
 
-const fallbackAppointments = [
-  { _id: 'app1', doctorId: { name: 'Dr. Rajesh Sharma', specialty: 'Cardiology' }, time: '10:30 AM', date: new Date(Date.now() + 86400000).toISOString(), status: 'confirmed' },
-  { _id: 'app2', doctorId: { name: 'Dr. Ananya Mukherjee', specialty: 'General Practice' }, time: '02:00 PM', date: new Date(Date.now() + 172800000).toISOString(), status: 'confirmed' }
-];
-
-const fallbackSessions = [
-  { _id: 'sess1', status: 'completed', symptomTags: ['fever', 'headache'], createdAt: new Date().toISOString(), diagnosis: { conditions: [{ name: 'High Fever & Viral Infection', probability: 'High', description: 'Systemic viral response with temperature' }], severity: 'severe', recommendedSpecialties: ['General Practitioner', 'Internal Medicine'], suggestedMedications: [{ name: 'Paracetamol', dosage: '500mg', frequency: 'Every 6 hours' }], lifestyleRecommendations: ['Rest in cool room', 'Hydrate with ORS'], followUpDays: 3 } }
-];
-
 export default function DashboardPage() {
   const [appointments, setAppointments] = useState([]);
   const [sessions, setSessions] = useState([]);
@@ -26,24 +17,24 @@ export default function DashboardPage() {
           treatmentPlansAPI.list()
         ]);
 
-        if (apptRes.status === 'fulfilled' && apptRes.value.data?.length > 0) {
+        if (apptRes.status === 'fulfilled' && apptRes.value.data) {
           setAppointments(apptRes.value.data);
         } else {
-          setAppointments(fallbackAppointments);
+          setAppointments([]);
         }
 
-        if (sessRes.status === 'fulfilled' && sessRes.value.data?.length > 0) {
+        if (sessRes.status === 'fulfilled' && sessRes.value.data) {
           setSessions(sessRes.value.data);
         } else {
-          setSessions(fallbackSessions);
+          setSessions([]);
         }
 
         if (plansRes.status === 'fulfilled' && plansRes.value.data) {
           setTreatmentPlans(plansRes.value.data);
         }
       } catch (e) {
-        setAppointments(fallbackAppointments);
-        setSessions(fallbackSessions);
+        setAppointments([]);
+        setSessions([]);
       } finally {
         setLoadingPlans(false);
       }
