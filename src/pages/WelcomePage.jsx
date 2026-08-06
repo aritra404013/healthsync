@@ -147,7 +147,7 @@ export default function WelcomePage() {
             
             {/* Hero Main Heading with Animated Gradient */}
             <div className="flex flex-col gap-3">
-              <h1 className="text-[38px] sm:text-[54px] lg:text-[64px] leading-[1.08] font-black tracking-tight text-slate-900">
+              <h1 className="text-[32px] sm:text-[54px] lg:text-[64px] leading-[1.08] font-black tracking-tight text-slate-900">
                 Instant AI Triage & <br />
                 <span className="text-gradient-animated">Ayurvedic Home Care</span>
               </h1>
@@ -171,8 +171,8 @@ export default function WelcomePage() {
                 {[
                   { key: 'fever', label: 'Fever 103°F', icon: 'thermostat' },
                   { key: 'cold', label: 'Severe Cold', icon: 'ac_unit' },
-                  { key: 'stomach', label: 'Stomach Pain', icon: 'digestive_system' },
-                  { key: 'headache', label: 'Headache', icon: 'headache' }
+                  { key: 'stomach', label: 'Stomach Pain', icon: 'spa' },
+                  { key: 'headache', label: 'Headache', icon: 'brain' }
                 ].map((item) => (
                   <button
                     key={item.key}
