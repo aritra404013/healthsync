@@ -1,12 +1,20 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { appointmentsAPI, chatAPI, treatmentPlansAPI } from '../services/api';
+import { useAuth } from '../context/AuthContext';
 
 export default function DashboardPage() {
+  const { user } = useAuth();
   const [appointments, setAppointments] = useState([]);
   const [sessions, setSessions] = useState([]);
   const [treatmentPlans, setTreatmentPlans] = useState([]);
   const [loadingPlans, setLoadingPlans] = useState(true);
+  
+  // Welcome Back Caring Modal State
+  const [showWelcomeBack, setShowWelcomeBack] = useState(false);
+  const [welcomeBackMessage, setWelcomeBackMessage] = useState('');
+  const [welcomeBackProblem, setWelcomeBackProblem] = useState('');
+  const [caringToast, setCaringToast] = useState(null);
 
   useEffect(() => {
     const loadData = async () => {
@@ -24,7 +32,29 @@ export default function DashboardPage() {
         }
 
         if (sessRes.status === 'fulfilled' && sessRes.value.data) {
-          setSessions(sessRes.value.data);
+          const list = sessRes.value.data;
+          setSessions(list);
+
+          // Evaluate returning user check-in popup conditions
+          const alreadyShown = sessionStorage.getItem('healthsync_welcome_shown');
+          if (!alreadyShown && list.length > 0) {
+            const lastSession = list[0];
+            const lastProblem = lastSession.diagnosis?.conditions?.[0]?.name || lastSession.symptomTags?.join(', ') || '';
+
+            if (lastProblem) {
+              const templates = [
+                `Welcome back! We were thinking of you. Are you feeling better and completely cured of your ${lastProblem} now?`,
+                `Hope you are doing well today! How is your recovery from ${lastProblem} coming along? Are you feeling fully cured?`,
+                `Hello again! We wanted to check in on you. Have you recovered from the ${lastProblem} you shared with our AI earlier?`
+              ];
+              const randomMsg = templates[Math.floor(Math.random() * templates.length)];
+              
+              setWelcomeBackProblem(lastProblem);
+              setWelcomeBackMessage(randomMsg);
+              setShowWelcomeBack(true);
+              sessionStorage.setItem('healthsync_welcome_shown', 'true');
+            }
+          }
         } else {
           setSessions([]);
         }
@@ -230,6 +260,83 @@ export default function DashboardPage() {
           </Link>
         ))}
       </div>
+
+      {/* CARING WELCOME BACK POPUP MODAL */}
+      {showWelcomeBack && (
+        <div className="fixed inset-0 bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-4 z-50 animate-fade-in">
+          <div className="bg-white rounded-[2rem] p-6 md:p-8 max-w-md w-full shadow-2xl border border-slate-200 text-center relative overflow-hidden card-interactive animate-scale-in">
+            {/* Ambient Background Blob */}
+            <div className="absolute -top-10 -right-10 w-40 h-40 bg-teal-400/10 rounded-full blur-2xl pointer-events-none"></div>
+            
+            {/* Heartbeat Pulse Icon */}
+            <div className="w-16 h-16 bg-rose-50 rounded-2xl flex items-center justify-center text-[36px] mx-auto mb-5 border border-rose-200/50 shadow-2xs">
+              <span className="material-symbols-outlined text-[36px] text-rose-500 animate-heartbeatPulse">favorite</span>
+            </div>
+
+            <h3 className="text-[22px] font-black text-slate-900 mb-2">
+              Welcome Back, {user?.name || 'Friend'}!
+            </h3>
+            
+            <p className="text-[14.5px] text-slate-600 font-semibold leading-relaxed mb-6">
+              {welcomeBackMessage}
+            </p>
+
+            <div className="flex flex-col sm:flex-row gap-3">
+              <button
+                type="button"
+                onClick={() => {
+                  setShowWelcomeBack(false);
+                  setCaringToast({
+                    type: 'success',
+                    text: `We are absolutely thrilled to hear you've fully recovered! Keep staying healthy & mindful! 🌿`
+                  });
+                  setTimeout(() => setCaringToast(null), 5000);
+                }}
+                className="flex-1 py-3 px-4 bg-teal-600 hover:bg-teal-700 text-white font-extrabold text-[14px] rounded-xl shadow-md transition-all active:scale-98 cursor-pointer flex items-center justify-center gap-1.5"
+              >
+                <span className="material-symbols-outlined text-[18px]">sentiment_very_satisfied</span>
+                <span>Yes, fully cured!</span>
+              </button>
+              
+              <button
+                type="button"
+                onClick={() => {
+                  setShowWelcomeBack(false);
+                  setCaringToast({
+                    type: 'warning',
+                    text: `We're here for you. We suggest starting a new assessment or consulting nearby doctors.`
+                  });
+                  setTimeout(() => setCaringToast(null), 6000);
+                }}
+                className="flex-1 py-3 px-4 bg-slate-100 hover:bg-slate-200 text-slate-700 font-extrabold text-[14px] rounded-xl border border-slate-200 transition-all active:scale-98 cursor-pointer flex items-center justify-center gap-1.5"
+              >
+                <span className="material-symbols-outlined text-[18px]">sentiment_dissatisfied</span>
+                <span>No, still unwell</span>
+              </button>
+            </div>
+            
+            <button
+              type="button"
+              onClick={() => setShowWelcomeBack(false)}
+              className="absolute top-4 right-4 w-8 h-8 flex items-center justify-center rounded-full text-slate-400 hover:bg-slate-100 hover:text-slate-600 transition-all cursor-pointer"
+            >
+              <span className="material-symbols-outlined text-[18px]">close</span>
+            </button>
+          </div>
+        </div>
+      )}
+
+      {/* CARING CONGRATS TOAST BANNER */}
+      {caringToast && (
+        <div className="fixed top-24 right-8 bg-slate-900 text-white px-5 py-4 rounded-xl shadow-xl z-50 animate-bounce flex items-center gap-3 text-[14px] font-semibold border border-slate-700 max-w-sm">
+          <div className={`w-9 h-9 rounded-lg flex items-center justify-center shrink-0 ${caringToast.type === 'success' ? 'bg-emerald-500/10 text-emerald-400' : 'bg-amber-500/10 text-amber-400'}`}>
+            <span className="material-symbols-outlined text-[20px] filled">
+              {caringToast.type === 'success' ? 'favorite' : 'medical_services'}
+            </span>
+          </div>
+          <span className="leading-relaxed">{caringToast.text}</span>
+        </div>
+      )}
     </div>
   );
 }
