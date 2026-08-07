@@ -90,13 +90,17 @@ export default function CarePlanPage() {
             return 0;
           });
           setDoctors(sorted);
+          try { sessionStorage.setItem('healthsync_cached_doctors', JSON.stringify(sorted)); } catch (e) {}
         } else {
           const { data } = await doctorsAPI.list({ limit: 5 });
-          setDoctors(data && data.length > 0 ? data : fallbackDoctors);
+          const resDocs = data && data.length > 0 ? data : fallbackDoctors;
+          setDoctors(resDocs);
+          try { sessionStorage.setItem('healthsync_cached_doctors', JSON.stringify(resDocs)); } catch (e) {}
         }
       } catch (err) {
         console.warn('CarePlan live doctors fetch notice:', err.message);
         setDoctors(fallbackDoctors);
+        try { sessionStorage.setItem('healthsync_cached_doctors', JSON.stringify(fallbackDoctors)); } catch (e) {}
       } finally {
         setLoadingDoctors(false);
       }
@@ -356,6 +360,7 @@ export default function CarePlanPage() {
                     <Link 
                       key={doc._id || doc.id} 
                       to={`/doctor/${doc._id || doc.id}`} 
+                      state={{ doctor: doc }}
                       className="block p-4 bg-surface-container-low rounded-xl border border-surface-variant/50 hover:border-primary hover:shadow-md transition-all group"
                     >
                       <div className="flex items-center gap-3">

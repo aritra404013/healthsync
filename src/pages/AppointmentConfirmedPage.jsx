@@ -40,7 +40,7 @@ export default function AppointmentConfirmedPage() {
     else findLocalAppointment();
   }, [id]);
 
-  const doctor = appointment?.doctorId;
+  const doctor = appointment?.doctorInfo || (typeof appointment?.doctorId === 'object' ? appointment.doctorId : null);
 
   const handleCalendar = () => {
     setCopied(true);

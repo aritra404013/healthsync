@@ -1,8 +1,20 @@
 import { useState, useEffect } from 'react';
-import { useParams, Link, useNavigate } from 'react-router-dom';
+import { useParams, Link, useNavigate, useLocation } from 'react-router-dom';
 import { doctorsAPI, appointmentsAPI } from '../services/api';
 
 const fallbackDoctorsList = [
+  {
+    _id: 'doc_in_1', id: 'doc_in_1', name: 'Dr. Rajesh Sharma', specialty: 'Cardiology', credentials: 'MBBS, MD, DM (Cardiology)', hospital: 'Apollo Medical Center', clinicName: 'Apollo Heart Clinic', rating: 4.9, reviewCount: 342, yearsExperience: 18, languages: ['English', 'Hindi', 'Marathi'], acceptingNewPatients: true, telehealthAvailable: true, imageUrl: 'https://images.unsplash.com/photo-1537368910025-700350fe46c7?w=400&auto=format&fit=crop&q=80', about: 'Dr. Rajesh Sharma is a Senior Interventional Cardiologist with over 18 years of clinical experience in coronary care, preventative cardiology, and hypertension management.', subSpecialties: ['Interventional Cardiology', 'Hypertension & Heart Failure', 'Coronary Angiography'], education: [{ degree: 'DM (Cardiology)', institution: 'AIIMS New Delhi' }, { degree: 'MD (Internal Medicine)', institution: 'KEM Hospital Mumbai' }], reviews: [{ patientInitials: 'A.K.', rating: 5, comment: 'Dr. Sharma explained everything patiently. Highly professional clinic!', date: new Date().toISOString() }]
+  },
+  {
+    _id: 'doc_in_2', id: 'doc_in_2', name: 'Dr. Ananya Mukherjee', specialty: 'General Practice', credentials: 'MBBS, MD (Internal Medicine)', hospital: 'Fortis Health Clinic', clinicName: 'Fortis Multispecialty Clinic', rating: 4.9, reviewCount: 289, yearsExperience: 14, languages: ['English', 'Hindi', 'Bengali'], acceptingNewPatients: true, telehealthAvailable: true, imageUrl: 'https://images.unsplash.com/photo-1559839734-2b71ea197ec2?w=400&auto=format&fit=crop&q=80', about: 'Dr. Ananya Mukherjee is a renowned Physician specializing in general medicine, fever management, diabetes care, and lifestyle disease prevention.', subSpecialties: ['Internal Diagnostics', 'Fever & Infection Care', 'Diabetology'], education: [{ degree: 'MD (Internal Medicine)', institution: 'Calcutta Medical College' }], reviews: [{ patientInitials: 'S.R.', rating: 5, comment: 'Extremely compassionate doctor. Excellent consultation experience.', date: new Date().toISOString() }]
+  },
+  {
+    _id: 'doc_in_3', id: 'doc_in_3', name: 'Dr. Vikram Malhotra', specialty: 'Neurology', credentials: 'MBBS, MS, DNB (Neurology)', hospital: 'Max Super Specialty Hospital', clinicName: 'Max Brain & Spine Clinic', rating: 4.8, reviewCount: 195, yearsExperience: 16, languages: ['English', 'Hindi', 'Punjabi'], acceptingNewPatients: true, telehealthAvailable: true, imageUrl: 'https://images.unsplash.com/photo-1622253692010-333f2da6031d?w=400&auto=format&fit=crop&q=80', about: 'Dr. Vikram Malhotra is a Senior Neurologist specializing in severe headache management, stroke prevention, epilepsy, and spinal disorders.', subSpecialties: ['Migraine & Headache Disorders', 'Stroke Care', 'Neuro-Diagnostics'], education: [{ degree: 'DNB Neurology', institution: 'MAMC New Delhi' }], reviews: [{ patientInitials: 'P.V.', rating: 5, comment: 'Dr. Malhotra correctly diagnosed my migraine after years of suffering.', date: new Date().toISOString() }]
+  },
+  {
+    _id: 'doc_in_4', id: 'doc_in_4', name: 'Dr. Priya Nair', specialty: 'Pediatrics', credentials: 'MBBS, DCH, MD (Pediatrics)', hospital: 'Manipal Healthcare Clinic', clinicName: 'Little Angels Child Care & Clinic', rating: 4.9, reviewCount: 412, yearsExperience: 12, languages: ['English', 'Hindi', 'Kannada'], acceptingNewPatients: true, telehealthAvailable: true, imageUrl: 'https://images.unsplash.com/photo-1594824813566-78a933758f46?w=400&auto=format&fit=crop&q=80', about: 'Dr. Priya Nair is a dedicated Pediatrician providing comprehensive child healthcare, growth monitoring, and pediatric immunization.', subSpecialties: ['Pediatric Infections', 'Child Growth & Nutrition', 'Vaccinations'], education: [{ degree: 'MD Pediatrics', institution: 'Bangalore Medical College' }], reviews: [{ patientInitials: 'M.N.', rating: 5, comment: 'Wonderful with kids! Very gentle and thorough.', date: new Date().toISOString() }]
+  },
   { _id: 'doc1', id: 'doc1', name: 'Dr. Sarah Jenkins', specialty: 'General Practice', credentials: 'MD, FACP', rating: 4.9, reviewCount: 128, yearsExperience: 14, languages: ['English', 'Spanish'], acceptingNewPatients: true, telehealthAvailable: true, imageUrl: 'https://images.unsplash.com/photo-1559839734-2b71ea197ec2?w=300&auto=format&fit=crop&q=80', about: 'Dr. Sarah Jenkins is a board-certified General Practitioner with over 14 years of experience in preventative healthcare and comprehensive patient evaluation.', subSpecialties: ['Preventative Care', 'Chronic Disease Management', 'Holistic Health'], education: [{ degree: 'Doctor of Medicine (MD)', institution: 'Harvard Medical School' }, { degree: 'Residency in Internal Medicine', institution: 'Massachusetts General Hospital' }], reviews: [{ patientInitials: 'R.M.', patientName: 'Rachel Miller', rating: 5, comment: 'Dr. Jenkins was exceptionally thorough and listened carefully to all my concerns.', date: new Date().toISOString() }] },
   { _id: 'doc2', id: 'doc2', name: 'Dr. Michael Chen', specialty: 'Neurology', credentials: 'MD, PhD', rating: 4.8, reviewCount: 94, yearsExperience: 11, languages: ['English', 'Mandarin'], acceptingNewPatients: true, telehealthAvailable: true, imageUrl: 'https://images.unsplash.com/photo-1622253692010-333f2da6031d?w=300&auto=format&fit=crop&q=80', about: 'Dr. Michael Chen specializes in headache disorders, migraines, and nerve pain with a focused patient-centered treatment approach.', subSpecialties: ['Headache Disorders', 'Migraine Care', 'Neuro-Diagnostics'], education: [{ degree: 'MD & PhD in Neurobiology', institution: 'Johns Hopkins School of Medicine' }], reviews: [{ patientInitials: 'D.K.', patientName: 'David Kim', rating: 5, comment: 'Clear explanations and very effective treatment plan for my chronic migraines.', date: new Date().toISOString() }] },
   { _id: 'doc3', id: 'doc3', name: 'Dr. Elena Rostova', specialty: 'Internal Medicine', credentials: 'MD', rating: 4.9, reviewCount: 210, yearsExperience: 18, languages: ['English', 'Russian'], acceptingNewPatients: true, telehealthAvailable: true, imageUrl: 'https://images.unsplash.com/photo-1594824813566-78a933758f46?w=300&auto=format&fit=crop&q=80', about: 'Dr. Elena Rostova provides integrative internal medicine consultations tailored to complex symptom profiles.', subSpecialties: ['Internal Diagnostics', 'Cardiovascular Health'], education: [{ degree: 'Doctor of Medicine', institution: 'Columbia University Vagelos College' }], reviews: [{ patientInitials: 'A.S.', patientName: 'Anna Smith', rating: 5, comment: 'Wonderful doctor! Very knowledgeable and compassionate.', date: new Date().toISOString() }] }
@@ -11,8 +23,9 @@ const fallbackDoctorsList = [
 export default function DoctorProfilePage() {
   const { id } = useParams();
   const navigate = useNavigate();
-  const [doctor, setDoctor] = useState(null);
-  const [loading, setLoading] = useState(true);
+  const location = useLocation();
+  const [doctor, setDoctor] = useState(location.state?.doctor || null);
+  const [loading, setLoading] = useState(!location.state?.doctor);
   const [selectedType, setSelectedType] = useState('in-person');
   const [selectedDate, setSelectedDate] = useState(0);
   const [selectedTime, setSelectedTime] = useState('10:30 AM');
@@ -32,23 +45,50 @@ export default function DoctorProfilePage() {
 
   useEffect(() => {
     const load = async () => {
+      // 1. If passed via state, prioritize state doctor data
+      if (location.state?.doctor) {
+        setDoctor(location.state.doctor);
+        setLoading(false);
+        return;
+      }
+
       try {
         const { data } = await doctorsAPI.getById(id);
-        if (data) setDoctor(data);
-        else findFallbackDoctor();
+        if (data && (data._id === id || data.id === id || data.name)) {
+          setDoctor(data);
+          setLoading(false);
+          return;
+        }
       } catch (e) {
-        findFallbackDoctor();
+        console.warn('Could not fetch doctor by ID from API:', e.message);
+      }
+
+      // 2. Check session storage cache
+      try {
+        const cachedStr = sessionStorage.getItem('healthsync_cached_doctors');
+        if (cachedStr) {
+          const cachedList = JSON.parse(cachedStr);
+          const cachedDoc = cachedList.find(d => d._id === id || d.id === id);
+          if (cachedDoc) {
+            setDoctor(cachedDoc);
+            setLoading(false);
+            return;
+          }
+        }
+      } catch (err) {}
+
+      // 3. Search fallback predefined doctors
+      const foundFallback = fallbackDoctorsList.find(d => d._id === id || d.id === id);
+      if (foundFallback) {
+        setDoctor(foundFallback);
+      } else {
+        setDoctor(null);
       }
       setLoading(false);
     };
 
-    const findFallbackDoctor = () => {
-      const found = fallbackDoctorsList.find(d => d._id === id || d.id === id) || fallbackDoctorsList[0];
-      setDoctor(found);
-    };
-
     load();
-  }, [id]);
+  }, [id, location.state]);
 
   const handleBooking = async () => {
     setBooking(true);

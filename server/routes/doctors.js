@@ -59,6 +59,14 @@ router.get('/search-live', async (req, res) => {
     const liveResults = await searchNearby(parseFloat(lat), parseFloat(lng), 'doctor', parseInt(radius));
     
     if (liveResults && liveResults.length > 0) {
+      // Upsert live doctors into localDb so findById can resolve them
+      liveResults.forEach(doc => {
+        const docId = doc._id || doc.id;
+        const existing = localDb.findById('doctors', docId);
+        if (!existing) {
+          localDb.insert('doctors', doc);
+        }
+      });
       return res.json(liveResults);
     }
 
@@ -78,6 +86,14 @@ router.get('/nearby', async (req, res) => {
     if (!lat || !lng) return res.status(400).json({ message: 'lat and lng required' });
 
     const tomtomResults = await searchNearby(parseFloat(lat), parseFloat(lng), 'doctor', parseInt(radius));
+    if (tomtomResults && tomtomResults.length > 0) {
+      tomtomResults.forEach(doc => {
+        const docId = doc._id || doc.id;
+        if (!localDb.findById('doctors', docId)) {
+          localDb.insert('doctors', doc);
+        }
+      });
+    }
     res.json({ dbDoctors: tomtomResults, nearbyResults: tomtomResults });
   } catch (error) {
     res.json({ dbDoctors: localDb.find('doctors'), nearbyResults: localDb.find('doctors') });
@@ -87,14 +103,17 @@ router.get('/nearby', async (req, res) => {
 // GET /api/doctors/:id — Get doctor by ID
 router.get('/:id', async (req, res) => {
   try {
-    if (mongoose.connection.readyState === 1) {
-      const doctor = await Doctor.findById(req.params.id);
+    const { id } = req.params;
+    if (mongoose.connection.readyState === 1 && mongoose.Types.ObjectId.isValid(id)) {
+      const doctor = await Doctor.findById(id);
       if (doctor) return res.json(doctor);
     }
-    const found = localDb.findById('doctors', req.params.id) || localDb.find('doctors')[0];
-    res.json(found);
+    const found = localDb.findById('doctors', id);
+    if (found) return res.json(found);
+
+    return res.status(404).json({ message: 'Doctor not found' });
   } catch (error) {
-    res.json(localDb.find('doctors')[0]);
+    return res.status(404).json({ message: 'Doctor not found' });
   }
 });
 

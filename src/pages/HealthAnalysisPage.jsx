@@ -233,10 +233,21 @@ export default function HealthAnalysisPage() {
         setMessages(prev => [...prev, { role: 'assistant', content: responseContent }]);
         
         // Handle nearby doctors returned from server
-        if (data.nearbyDoctors && data.nearbyDoctors.length > 0) {
+        if (data && data.nearbyDoctors && data.nearbyDoctors.length > 0) {
           setNearbyDoctors(data.nearbyDoctors);
+          try { sessionStorage.setItem('healthsync_cached_doctors', JSON.stringify(data.nearbyDoctors)); } catch (e) {}
+        } else {
+          try {
+            const { data: liveDocs } = await doctorsAPI.searchLive({ lat: userLocation.lat, lng: userLocation.lng, radius: 10000 });
+            setNearbyDoctors(liveDocs || null);
+            if (liveDocs) {
+              try { sessionStorage.setItem('healthsync_cached_doctors', JSON.stringify(liveDocs)); } catch (e) {}
+            }
+          } catch (e) {
+            setNearbyDoctors(null);
+          }
         }
-
+        
         // Handle emergency/severe alert
         const diagSeverity = data.diagnosis?.severity;
         if (diagSeverity === 'emergency' || diagSeverity === 'severe') {
@@ -561,6 +572,7 @@ export default function HealthAnalysisPage() {
                   <Link
                     key={doc._id || doc.id || idx}
                     to={`/doctor/${doc._id || doc.id}`}
+                    state={{ doctor: doc }}
                     className="flex items-center gap-3 p-3.5 bg-white rounded-2xl border border-slate-200 hover:border-blue-500 hover:shadow-md transition-all group"
                   >
                     <img

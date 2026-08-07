@@ -76,12 +76,20 @@ export default function DoctorsPage() {
 
       // Call live TomTom & Overpass POI Search
       const { data } = await doctorsAPI.searchLive(params);
-      setDoctors(data || []);
+      const list = data || [];
+      setDoctors(list);
+      try {
+        sessionStorage.setItem('healthsync_cached_doctors', JSON.stringify(list));
+      } catch (e) {}
     } catch (err) {
       console.warn('Failed to load live doctors:', err);
       try {
         const { data } = await doctorsAPI.list();
-        setDoctors(data || []);
+        const list = data || [];
+        setDoctors(list);
+        try {
+          sessionStorage.setItem('healthsync_cached_doctors', JSON.stringify(list));
+        } catch (e) {}
       } catch (e) {}
     } finally {
       setLoading(false);
@@ -331,9 +339,14 @@ export default function DoctorsPage() {
                               {doc.rating || 4.9}
                             </span>
                           </div>
-                          <h3 className="text-[16px] font-extrabold text-slate-900 mt-1 truncate">
+                          <Link
+                            to={`/doctor/${docId}`}
+                            state={{ doctor: doc }}
+                            onClick={(e) => e.stopPropagation()}
+                            className="text-[16px] font-extrabold text-slate-900 mt-1 truncate block hover:text-teal-700 transition-colors"
+                          >
                             {doc.name}
-                          </h3>
+                          </Link>
                           <p className="text-[11px] font-semibold text-slate-500 truncate">{doc.credentials || 'MD'}</p>
                         </div>
                       </div>
@@ -362,7 +375,17 @@ export default function DoctorsPage() {
                         <span>Book Appointment</span>
                       </button>
 
-                      <div className="grid grid-cols-2 gap-2">
+                      <div className="grid grid-cols-3 gap-1.5">
+                        <Link
+                          to={`/doctor/${docId}`}
+                          state={{ doctor: doc }}
+                          onClick={(e) => e.stopPropagation()}
+                          className="py-2 bg-slate-50 hover:bg-slate-100 text-slate-700 border border-slate-200 rounded-xl text-[11px] font-extrabold flex items-center justify-center gap-1 transition-colors"
+                        >
+                          <span className="material-symbols-outlined text-[14px] text-teal-600">person</span>
+                          <span>Profile</span>
+                        </Link>
+
                         <a
                           href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(`${doc.name} ${doc.address}`)}`}
                           target="_blank"
@@ -380,7 +403,7 @@ export default function DoctorsPage() {
                           className="py-2 bg-slate-50 hover:bg-slate-100 text-slate-700 border border-slate-200 rounded-xl text-[11px] font-extrabold flex items-center justify-center gap-1 transition-colors"
                         >
                           <span className="material-symbols-outlined text-[14px] text-teal-600">call</span>
-                          <span>Call Clinic</span>
+                          <span>Call</span>
                         </a>
                       </div>
                     </div>

@@ -164,7 +164,7 @@ export default function PharmaciesPage() {
 
                     {isDoctors ? (
                       <button 
-                        onClick={(e) => { e.stopPropagation(); navigate(`/doctor/${item._id || item.id || 'doc1'}`); }}
+                        onClick={(e) => { e.stopPropagation(); navigate(`/doctor/${item._id || item.id || 'doc1'}`, { state: { doctor: item } }); }}
                         className="bg-primary text-on-primary text-[12px] font-bold px-4 py-2 rounded-xl transition-all shadow-sm hover:bg-primary-container"
                       >
                         Book Appointment
